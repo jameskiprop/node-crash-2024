@@ -13,7 +13,7 @@ const logger = (res, req, next) => {
 };
 
 //JSON middlewear
-const jsonMiddlewear = (res, req, next) => {
+const jsonMiddleware = (res, req, next) => {
   res.setHeader("Content-type", "application/json");
   next();
 };
@@ -35,6 +35,21 @@ const getUserByIdHandler = (req, res) => {
     res.write(JSON.stringify({ message: "User not found" }));
   }
   res.end();
+};
+
+//Route handler for POST /api/users
+const createUserHandler = (req, res) => {
+  let body = "";
+
+  //Listen for Data
+  req.on("data", (chunk) => {
+    body += chunk.toString();
+  });
+  req.on("end", () => {
+    const newUser = JSON.parse(body);
+    users.push(newUser);
+    res.statusCode = 201;
+  });
 };
 
 //Not Found Handler
